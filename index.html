@@ -140,6 +140,35 @@ nav button.on{box-shadow:0 3px 0 #1e3a8a,0 9px 16px rgba(37,99,235,.4)}
 .mdl{background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:16px;padding:18px;width:min(420px,100%);box-shadow:0 24px 60px rgba(0,0,0,.4)}
 .mdl p{margin:0 0 12px}.mdl input{width:100%;margin-bottom:8px}
 #toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:60;background:var(--tx);color:var(--bg);padding:10px 16px;border-radius:12px;max-width:min(92vw,520px);box-shadow:0 10px 30px rgba(0,0,0,.3);font-size:14px;text-align:center}
+html{-webkit-text-size-adjust:100%}
+.seg span{user-select:none;-webkit-tap-highlight-color:transparent}
+@media (max-width:640px){
+.hero{padding:16px 12px 56px}.hw{gap:10px}.logo{width:46px;height:46px;font-size:26px;border-radius:13px}
+.hero h1{font-size:17px}.hero p{font-size:12px}
+main{padding:0 12px calc(24px + env(safe-area-inset-bottom,0px));margin-top:-40px}
+#stats{display:flex;overflow-x:auto;gap:8px;scrollbar-width:none;padding-bottom:4px}#stats::-webkit-scrollbar{display:none}.stat{flex:none;min-width:104px;padding:8px 12px}.stat b{font-size:18px}.stat span{font-size:11px;white-space:nowrap}
+nav{width:auto;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}nav button{white-space:nowrap;flex:none;padding:10px 14px}
+.card{padding:12px;border-radius:14px}
+select,input,textarea{font-size:16px;min-height:44px}
+.row{gap:8px}.row>div{flex:1 1 calc(50% - 8px);min-width:0}.row select,.row input{width:100%}
+.row>.btn{flex:1 1 calc(50% - 8px);min-height:44px}
+.btn{min-height:44px}
+#sv{display:none}
+.abs,.abs tbody{display:block;min-width:0;width:100%}
+.abs tr:first-child{display:none}
+.abs tr{display:block;border:1px solid var(--bd);border-radius:12px;padding:10px;margin-bottom:8px;background:var(--card)}
+.abs td{display:inline;border:0;padding:0;white-space:normal}
+.abs td:nth-child(1){color:var(--mu);margin-right:6px}
+.abs td:nth-child(2){font-weight:600}
+.abs td.seg{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px}
+.abs .seg label{display:block;margin:0}
+.abs .seg span{display:block;text-align:center;padding:12px 0;border-radius:10px;font-size:13px;font-weight:500}
+.abs .seg span:active{transform:scale(.95)}
+.sbar{bottom:calc(8px + env(safe-area-inset-bottom,0px));padding:8px 10px;gap:8px}
+.sbar #sv2{flex:1 1 100%;min-height:46px;font-size:16px}#cn{flex:1 1 100%;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.cc{white-space:nowrap}
+#cn{gap:4px}.cc{padding:2px 8px;font-size:12px}
+}
 </style>
 </head><body>
 <div class="hero"><div class="hw"><div class="logo">🏫</div><div><h1>Rekap Absensi Pembelajaran</h1><p>SMK Negeri 1 Sungai Rumbai</p><span class="pill" id="role"></span></div></div></div>
@@ -251,7 +280,7 @@ function vAbsen(){
   <div><label>Tanggal</label><input type="date" id="t" value="${f.tgl}"></div>
   <div><label>Mata pelajaran</label><input id="mp" list="mpl" value="${esc(f.mapel)}" placeholder="mis. Matematika" size="18"><datalist id="mpl">${mp.map(m=>`<option value="${esc(m)}">`).join("")}</datalist></div><div><label>Nama guru</label><input id="gr" list="grl" value="${esc(f.guru)}" placeholder="Nama guru pengajar" size="20"><datalist id="grl">${gurus().map(g=>`<option value="${esc(g)}">`).join("")}</datalist></div><div><label>Dari jam</label><select id="j1">${jo(f.jd)}</select></div><div><label>Sampai jam</label><select id="j2">${jo(f.js)}</select></div><button class="btn" id="all">Semua hadir</button><button class="btn p" id="sv">Simpan absen</button></div>
   <div class="sub">① Pilih kelas, mapel &amp; jam → ② tandai siswa (bawaan: Hadir) → ③ Simpan</div>${d?'<div class="sub">Absen tanggal ini sudah tersimpan, simpan lagi untuk memperbarui.</div>':""}
-  ${list.length?`<div class="sc"><table><tr><th>No</th><th>Nama</th><th>Status</th></tr>${list.map((s,i)=>`<tr><td>${i+1}</td><td>${esc(s.nama)}</td><td class="seg">${Object.keys(ST).map(c=>`<label class="${c}"><input type="radio" name="r${s.id}" value="${c}" ${(rec[s.id]||"H")===c?"checked":""}><span>${ST[c]}</span></label>`).join("")}</td></tr>`).join("")}</table></div>`:'<div class="msg">Belum ada siswa di kelas ini. Tambahkan di menu Data Siswa.</div>'}</div>`;
+  ${list.length?`<div class="sc"><table class="abs"><tr><th>No</th><th>Nama</th><th>Status</th></tr>${list.map((s,i)=>`<tr><td>${i+1}</td><td>${esc(s.nama)}</td><td class="seg">${Object.keys(ST).map(c=>`<label class="${c}"><input type="radio" name="r${s.id}" value="${c}" ${(rec[s.id]||"H")===c?"checked":""}><span>${ST[c]}</span></label>`).join("")}</td></tr>`).join("")}</table></div>`:'<div class="msg">Belum ada siswa di kelas ini. Tambahkan di menu Data Siswa.</div>'}</div>`;
   $("#k").onchange=e=>{f.kelas=e.target.value;keep();render()};
   $("#t").onchange=e=>{f.tgl=e.target.value;keep();render()};
   $("#mp").onchange=e=>{f.mapel=e.target.value.trim();keep();render()};
@@ -342,7 +371,7 @@ function liveBar(btn,L){L=L||ST;const b=document.createElement('div');b.classNam
   $('#v').onchange=up;up();$('#sv2').onclick=()=>$(btn).click()}
 function vApel(){
   const list=byKelas(f.kelas),d=D.apel[apid(f.tgl,f.kelas)],rec=d?d.rec:{};
-  $('#v').innerHTML=`<div class='card'><h3 class='ttl'>🌅 Absen Apel Pagi</h3><div class='sub'>① Pilih kelas &amp; tanggal → ② tandai siswa (bawaan: Hadir) → ③ Simpan</div><div class='row' style='margin-top:12px'><div><label>Kelas</label><select id='k'>${kopt(f.kelas)}</select></div><div><label>Tanggal</label><input type='date' id='t' value='${f.tgl}'></div><div><label>Petugas / pembina apel</label><input id='pt' value='${esc(f.piket).replace(/'/g,'&#39;')}' placeholder='Nama guru' size='20'></div><button class='btn' id='all'>Semua hadir</button><button class='btn p' id='sv'>Simpan apel</button></div>${d?"<div class='sub'>Apel tanggal ini sudah tersimpan, simpan lagi untuk memperbarui.</div>":''}${list.length?`<div class='sc'><table><tr><th>No</th><th>Nama</th><th>Status</th></tr>${list.map((s,i)=>`<tr><td>${i+1}</td><td>${esc(s.nama)}</td><td class='seg'>${Object.keys(AP).map(c=>`<label class='${c}'><input type='radio' name='r${s.id}' value='${c}' ${(rec[s.id]||'H')===c?'checked':''}><span>${AP[c]}</span></label>`).join('')}</td></tr>`).join('')}</table></div>`:"<div class='msg'>Belum ada siswa di kelas ini.</div>"}</div>`;
+  $('#v').innerHTML=`<div class='card'><h3 class='ttl'>🌅 Absen Apel Pagi</h3><div class='sub'>① Pilih kelas &amp; tanggal → ② tandai siswa (bawaan: Hadir) → ③ Simpan</div><div class='row' style='margin-top:12px'><div><label>Kelas</label><select id='k'>${kopt(f.kelas)}</select></div><div><label>Tanggal</label><input type='date' id='t' value='${f.tgl}'></div><div><label>Petugas / pembina apel</label><input id='pt' value='${esc(f.piket).replace(/'/g,'&#39;')}' placeholder='Nama guru' size='20'></div><button class='btn' id='all'>Semua hadir</button><button class='btn p' id='sv'>Simpan apel</button></div>${d?"<div class='sub'>Apel tanggal ini sudah tersimpan, simpan lagi untuk memperbarui.</div>":''}${list.length?`<div class='sc'><table class="abs"><tr><th>No</th><th>Nama</th><th>Status</th></tr>${list.map((s,i)=>`<tr><td>${i+1}</td><td>${esc(s.nama)}</td><td class='seg'>${Object.keys(AP).map(c=>`<label class='${c}'><input type='radio' name='r${s.id}' value='${c}' ${(rec[s.id]||'H')===c?'checked':''}><span>${AP[c]}</span></label>`).join('')}</td></tr>`).join('')}</table></div>`:"<div class='msg'>Belum ada siswa di kelas ini.</div>"}</div>`;
   $('#k').onchange=e=>{f.kelas=e.target.value;keep();render()};
   $('#t').onchange=e=>{f.tgl=e.target.value;keep();render()};
   $('#pt').onchange=e=>{f.piket=e.target.value.trim();keep()};
